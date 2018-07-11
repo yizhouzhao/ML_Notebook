@@ -51,7 +51,8 @@ class CocoCaptionData:
         # self.dict_file = os.path.join(data_dir, 'coco2014_vocab.json')
         self.train_url_file = os.path.join(data_dir, 'train2017')
         self.val_url_file = os.path.join(data_dir, 'val2017')
-
+        self.labels_file = os.path.join(data_dir, "caption_int.csv")
+        self.caption_id = os.path.join(data_dir, "caption_id.csv")
         # self.dict_data = self.get_vocab()
 
     def get_captions(self, is_training):
@@ -83,7 +84,6 @@ class CocoCaptionData:
         return caption_data, image_data
 
 
-
     # def get_vocab(self):
     #     with open(self.dict_file, 'r') as f:
     #         dict_data = json.load(f)
@@ -110,15 +110,16 @@ class CocoCaptionData:
         #     features = self.get_features(pca_features, is_training)
         # else:
         # features = self.get_image_url(is_training)
-
-
-        captions = caption_data["caption"]
+        
+        caption_labels = pd.read_csv(self.labels_file)
+        caption_id = pd.read_csv(self.caption_id)
+        # captions = caption_data["caption"]
         image_id = caption_data["image_id"]
-        caption_id = caption_data["id"]
+        # caption_id = caption_data["id"]
 
         def input_fn():
             file_name = np.array([np.array(image_data[i]) for i in image_id])
-            ds = tf.data.Dataset.from_tensor_slices((dict(filename=file_name), captions))
+            ds = tf.data.Dataset.from_tensor_slices((dict(filename=file_name, caption_id=caption_id), caption_labels))
             # if not use_feature:
             ds = ds.map(url_to_image)
             if is_training:
@@ -143,6 +144,14 @@ class CocoCaptionData:
             for v in c.split(" "):
                 vocab_data.add(v)
         return list(vocab_data)
+
+    @staticmethod
+    def caption_to_vocab(caption_data, vocab_data):
+        output = []
+        for string in caption_data:
+            words = string.split(" ")
+            output.append(np.array(list(map(lambda x: vocab_data.index(x), words))))
+        return output
 
 ############################################################
 ################  Preprocessed Feature Map      ############

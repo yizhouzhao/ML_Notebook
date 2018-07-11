@@ -38,3 +38,6 @@ Thumbs.db
 
 #IPythonNotebook Checkpoint
 .ipynb_checkpoints/
+__pycache__/
+*.pyc
+data/

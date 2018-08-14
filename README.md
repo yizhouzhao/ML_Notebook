@@ -5,3 +5,5 @@
 ## TODO
 - Proof Read previous notes
 - Clean Index for Image Localization
+- Add work citation
+- CLEAN EVERYTHING!

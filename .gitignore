@@ -41,4 +41,9 @@ Thumbs.db
 __pycache__/
 *.pyc
 data/
-model/
+model/CNN/SampleCNNs/tmp/
+CNN/images/
+CNN/models/
+eigenfaces/lfw-funneled.tgz
+eigenfaces/lfw-funneled.tgz.1
+eigenfaces/lfw_funneled/

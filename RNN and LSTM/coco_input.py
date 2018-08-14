@@ -112,14 +112,15 @@ class CocoCaptionData:
         # features = self.get_image_url(is_training)
         
         caption_labels = pd.read_csv(self.labels_file)
-        caption_id = pd.read_csv(self.caption_id)
+        # caption_id = pd.read_csv(self.caption_id)
         # captions = caption_data["caption"]
-        image_id = caption_data["image_id"]
+        # image_id = caption_data["image_id"]
         # caption_id = caption_data["id"]
-
+        image_id = np.array([i[-1] for i in caption_labels.values])
+        caption_ids = np.array([i[1:-2] for i in caption_labels.values])
         def input_fn():
             file_name = np.array([np.array(image_data[i]) for i in image_id])
-            ds = tf.data.Dataset.from_tensor_slices((dict(filename=file_name, caption_id=caption_id), caption_labels))
+            ds = tf.data.Dataset.from_tensor_slices((dict(filename=file_name), caption_ids))
             # if not use_feature:
             ds = ds.map(url_to_image)
             if is_training:
